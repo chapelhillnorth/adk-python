@@ -252,7 +252,7 @@ def _build_request_log(req: LlmRequest) -> str:
       )
       for content in req.contents
   ]
-
+  return ''
   return f"""
 LLM Request:
 -----------------------------------------------------------
@@ -275,6 +275,7 @@ def _build_response_log(resp: types.GenerateContentResponse) -> str:
       function_calls_text.append(
           f'name: {func_call.name}, args: {func_call.args}'
       )
+  return ''
   return f"""
 LLM Response:
 -----------------------------------------------------------
