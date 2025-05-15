@@ -910,8 +910,8 @@ def get_fast_api_app(
     agent_module = importlib.import_module(app_name)
     if hasattr(agent_module, 'agent') and hasattr(agent_module.agent, 'root_agent'):
       root_agent = agent_module.agent.root_agent
-    elif hasattr(agent_module, 'get_agent_for_adk_web'):
-      root_agent = await agent_module.get_agent_for_adk_web()
+    elif hasattr(agent_module, 'agent') and hasattr(agent_module.agent, 'get_agent_for_adk_web'):
+      root_agent = await agent_module.agent.get_agent_for_adk_web()
     else:
       raise ValueError(f'Unable to find "root_agent" from {app_name}.')
 
