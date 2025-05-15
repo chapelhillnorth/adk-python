@@ -12,26 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Optional
-from pydantic import BaseModel
-from .eval_case import EvalCase
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from ..memory.memory_entry import MemoryEntry
 
 
-class EvalSet(BaseModel):
-  """A set of eval cases."""
-
-  eval_set_id: str
-  """Unique identifier for the eval set."""
-
-  name: Optional[str] = None
-  """Name of the dataset."""
-
-  description: Optional[str] = None
-  """Description of the dataset."""
-
-  eval_cases: list[EvalCase]
-  """List of eval cases in the dataset. Each case represents a single
-  interaction to be evaluated."""
-
-  creation_timestamp: float = 0.0
-  """The time at which this eval set was created."""
+def extract_text(memory: MemoryEntry, splitter: str = ' ') -> str:
+  """Extracts the text from the memory entry."""
+  if not memory.content.parts:
+    return ''
+  return splitter.join(
+      [part.text for part in memory.content.parts if part.text]
+  )
