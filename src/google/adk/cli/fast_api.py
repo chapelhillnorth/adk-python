@@ -397,6 +397,10 @@ def get_fast_api_app(
   ) -> Session:
     # Connect to managed session if agent_engine_id is set.
     app_name = agent_engine_id if agent_engine_id else app_name
+    agent_module = importlib.import_module(app_name)
+    if agent_module and hasattr(agent_module, 'get_initial_state_for_adk_web'):
+      print(f'Loading initial state for {app_name}')
+      state = agent_module.get_initial_state_for_adk_web()
     logger.info("New session created")
     return session_service.create_session(
         app_name=app_name, user_id=user_id, state=state
@@ -904,9 +908,10 @@ def get_fast_api_app(
     if app_name in root_agent_dict:
       return root_agent_dict[app_name]
     agent_module = importlib.import_module(app_name)
-    if getattr(agent_module.agent, "root_agent"):
-      print(f'{app_name} has root_agent')
+    if hasattr(agent_module, 'agent'):
       root_agent = agent_module.agent.root_agent
+    elif hasattr(agent_module, 'get_agent_for_adk_web'):
+      root_agent = await agent_module.get_agent_for_adk_web()
     else:
       raise ValueError(f'Unable to find "root_agent" from {app_name}.')
 
