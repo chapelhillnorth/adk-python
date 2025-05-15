@@ -12,26 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+from __future__ import annotations
+
 from typing import Optional
+
+from google.genai import types
 from pydantic import BaseModel
-from .eval_case import EvalCase
 
 
-class EvalSet(BaseModel):
-  """A set of eval cases."""
+class MemoryEntry(BaseModel):
+  """Represent one memory entry."""
 
-  eval_set_id: str
-  """Unique identifier for the eval set."""
+  content: types.Content
+  """The main content of the memory."""
 
-  name: Optional[str] = None
-  """Name of the dataset."""
+  author: Optional[str] = None
+  """The author of the memory."""
 
-  description: Optional[str] = None
-  """Description of the dataset."""
+  timestamp: Optional[str] = None
+  """The timestamp when the original content of this memory happened.
 
-  eval_cases: list[EvalCase]
-  """List of eval cases in the dataset. Each case represents a single
-  interaction to be evaluated."""
-
-  creation_timestamp: float = 0.0
-  """The time at which this eval set was created."""
+  This string will be forwarded to LLM. Preferred format is ISO 8601 format.
+  """
