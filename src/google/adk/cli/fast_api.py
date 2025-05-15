@@ -905,6 +905,7 @@ def get_fast_api_app(
       return root_agent_dict[app_name]
     agent_module = importlib.import_module(app_name)
     if getattr(agent_module.agent, "root_agent"):
+      print(f'{app_name} has root_agent')
       root_agent = agent_module.agent.root_agent
     else:
       raise ValueError(f'Unable to find "root_agent" from {app_name}.')
